@@ -11,8 +11,7 @@ import { cn } from "@/lib/utils";
 export type ReaderProjectData = {
   id: string;
   title: string;
-  capacityUpperBound: number;
-  description?: string;
+  description: string;
 };
 
 export function useMyReadingsColumns(): ColumnDef<ReaderProjectData>[] {
@@ -38,7 +37,7 @@ export function useMyReadingsColumns(): ColumnDef<ReaderProjectData>[] {
       id: "Project Title",
       accessorFn: ({ title }) => title,
       header: () => (
-        <div className="min-w-52 max-w-56 py-1 pl-4">Project Title</div>
+        <div className="min-w-60 max-w-60 py-1 pl-4">Project Title</div>
       ),
       cell: ({
         row: {
@@ -49,7 +48,7 @@ export function useMyReadingsColumns(): ColumnDef<ReaderProjectData>[] {
           <Link
             className={cn(
               buttonVariants({ variant: "link" }),
-              "inline-block w-52 truncate px-0 text-start",
+              "inline-block w-60 truncate px-0 text-start",
             )}
             href={`${instancePath}/projects/${id}`}
           >

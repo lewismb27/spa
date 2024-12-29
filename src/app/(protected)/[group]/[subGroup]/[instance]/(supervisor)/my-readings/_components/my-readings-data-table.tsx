@@ -1,11 +1,7 @@
 "use client";
 
 import DataTable from "@/components/ui/data-table/data-table";
-
-import {
-  ReaderProjectData,
-  useMyReadingsColumns,
-} from "./my-readings-columns";
+import { ReaderProjectData, useMyReadingsColumns } from "./my-readings-columns";
 
 export function MyReadingsDataTable({
   projects,
@@ -14,11 +10,11 @@ export function MyReadingsDataTable({
 }) {
   const columns = useMyReadingsColumns();
 
-    return (
-        <DataTable
-        searchableColumn={{ id: "Project Title", displayName: "Project Titles" }}
-        columns={columns}
-        data={projects}
+  return (
+    <DataTable
+      searchableColumn={{ id: "Project Title", displayName: "Project Titles" }}
+      columns={columns}
+      data={projects}
     />
-    );
+  );
 }

@@ -1,7 +1,8 @@
 import { Stage } from "@prisma/client";
+import { AddReadersSection } from "./_components/add-readers-section";
 
 import { AccessControl } from "@/components/access-control";
-import { Heading } from "@/components/heading";
+import { Heading, SubHeading } from "@/components/heading";
 import { PanelWrapper } from "@/components/panel-wrapper";
 
 import { api } from "@/lib/trpc/server";
@@ -9,30 +10,20 @@ import { InstanceParams } from "@/lib/validations/params";
 
 import { app, metadataTitle } from "@/content/config/app";
 import { pages } from "@/content/pages";
-import { MyReadingsDataTable } from "./_components/my-readings-data-table";
 
 export async function generateMetadata({ params }: { params: InstanceParams }) {
   const { displayName } = await api.institution.instance.get({ params });
 
   return {
-    title: metadataTitle([pages.myReadings.title, displayName, app.name]),
+    title: metadataTitle([pages.uploadReadings.title, displayName, app.name]),
   };
 }
 
 export default async function Page({ params }: { params: InstanceParams }) {
-  // Will be : await api.user.reader.projects({ ????
-  const { projects } = await api.user.supervisor.readings({
-    params,
-  });
-
   return (
-    <>
-      <Heading>My Readings</Heading>
-      <PanelWrapper className="pt-6">
-        <AccessControl allowedStages={[Stage.ALLOCATION_PUBLICATION]}>
-          <MyReadingsDataTable projects={projects} />
-        </AccessControl>
-      </PanelWrapper>
-    </>
+    <PanelWrapper className="mt-10">
+      <SubHeading className="mb-4">{pages.uploadReadings.title}</SubHeading>
+      <AddReadersSection />
+    </PanelWrapper>
   );
 }

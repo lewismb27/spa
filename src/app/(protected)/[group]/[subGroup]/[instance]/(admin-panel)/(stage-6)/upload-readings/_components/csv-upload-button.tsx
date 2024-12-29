@@ -6,22 +6,20 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { CSVParsingErrorCard } from "@/components/toast-card/csv-parsing-error";
-import { UserCreationErrorCard } from "@/components/toast-card/user-creation-error";
 import { Input } from "@/components/ui/input";
 
-import { parseForDuplicates } from "@/lib/utils/csv/parse-for-duplicates";
-import { addSupervisorsCsvRowSchema } from "@/lib/validations/add-users/csv";
-import { NewSupervisor } from "@/lib/validations/add-users/new-user";
+import { parseForDuplicates } from "@/lib/utils/csv/parse-for-duplicates-readers";
+import { allocateReadersCsvRowSchema } from "@/lib/validations/allocate-readers/csv";
+import { NewReaderAllocation } from "@/lib/validations/allocate-readers/new-reader-allocation";
 
 export function CSVUploadButton({
   handleUpload,
   requiredHeaders,
 }: {
-  handleUpload: (data: NewSupervisor[]) => Promise<void>;
+  handleUpload: (data: NewReaderAllocation[]) => Promise<void>;
   requiredHeaders: string[];
 }) {
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    // TODO: handle multiple files
     const fileList = event.target.files;
     if (fileList && fileList.length > 0) {
       const file = fileList[0];
@@ -39,7 +37,7 @@ export function CSVUploadButton({
           }
 
           const result = z
-            .array(addSupervisorsCsvRowSchema)
+            .array(allocateReadersCsvRowSchema)
             .safeParse(res.data);
 
           if (!result.success) {
@@ -64,21 +62,14 @@ export function CSVUploadButton({
             toast.error("All rows seem to contain duplicates");
           } else {
             toast.success(`${uniqueRows.length} rows parsed successfully!`);
-            toast.error(
-              <UserCreationErrorCard
-                error={`${duplicateRowGuids.size} duplicate rows found`}
-                affectedUsers={Array.from(duplicateRowGuids)}
-              />,
-            );
           }
 
           handleUpload(
             uniqueRows.map((e) => ({
-              fullName: e.full_name,
-              institutionId: e.guid,
-              email: e.email,
-              projectTarget: e.project_target,
-              projectUpperQuota: e.project_upper_quota,
+              project_title: e.project_title,
+              student_guid: e.student_guid,
+              supervisor_guid: e.supervisor_guid,
+              reader_name: e.reader_name,
             })),
           );
         },
